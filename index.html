@@ -3,110 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andrey University</title>
+    <title>Вход в аккаунт | Andrey University</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="./css/styles.css">
+    
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+    </style>
 </head>
 <body>
-    <div class="d-flex">
-        <!-- Sidebar -->
-        <nav id="sidebar" class="bg-light shadow">
-            <div class="sidebar-header p-3 d-flex align-items-center justify-content-between">
-                <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center text-decoration-none text-dark" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user-circle fa-2x"></i>
-                        <span id="username" class="ms-2">Username</span>
-                        <i class="fas fa-chevron-down ms-1"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Настройки</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Выйти</a></li>
-                    </ul>
-                </div>
+    <div class="login-card">
+        <h2 class="text-center mb-4">Andrey University</h2>
+        <p class="text-muted text-center mb-4">Введите свои данные для входа</p>
+        <form id="login-form">
+            <div class="mb-3">
+                <label for="username" class="form-label">Имя пользователя</label>
+                <input type="text" id="username" class="form-control" placeholder="Введите имя пользователя" required>
             </div>
-            <ul class="list-unstyled components px-3">
-                <li>
-                    <a href="#learningMenu" data-bs-toggle="collapse" aria-expanded="false" class="d-flex align-items-center">
-                        <i class="fas fa-graduation-cap"></i>
-                        <span class="ms-2">Обучение</span>
-                        <i class="fas fa-chevron-down ms-auto"></i>
-                    </a>
-                    <ul class="collapse list-unstyled ms-3" id="learningMenu">
-                        <li><a href="#" class="d-block">Курсы</a></li>
-                        <li><a href="#" class="d-block">Тестирование</a></li>
-                        <li><a href="#" class="d-block">Итоговые проекты</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="d-flex align-items-center">
-                        <i class="fas fa-envelope"></i>
-                        <span class="ms-2">Сообщения</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="d-flex align-items-center">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="ms-2">Покупки</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="text-center mt-auto mb-3">
-                <button id="toggleSidebar" class="btn btn-light border">
-                    <i class="fas fa-angle-double-left"></i>
-                </button>
+            <div class="mb-3">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password" id="password" class="form-control" placeholder="Введите пароль" required>
             </div>
-        </nav>
-        <!-- Content -->
-        <div class="content p-4 w-100 bg-white">
-            <div class="text-center">
-                <h1 class="mb-4 display-4">Добро пожаловать в <span class="text-primary">Andrey University</span>!</h1>
-                <p class="lead text-muted">
-                    Мы предлагаем лучшие курсы по IT-технологиям, чтобы вы смогли достичь своей мечты и стать высококлассным профессионалом. 
-                    От практических курсов до реальных проектов — мы всегда с вами на пути к успеху!
-                </p>
-                <p class="fs-5">
-                    Присоединяйтесь к нашему сообществу и начните изучение прямо сейчас. Развивайте навыки, вдохновляйтесь и добивайтесь целей.
-                </p>
-                <a href="#learningMenu" class="btn btn-primary btn-lg">
-                    Начать обучение <i class="fas fa-arrow-right ms-2"></i>
-                </a>
-            </div>
-            <div class="mt-5">
-                <h2 class="mb-4">Почему стоит выбрать нас?</h2>
-                <div class="row g-4">
-                    <div class="col-md-4">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <i class="fas fa-award fa-3x text-primary mb-3"></i>
-                                <h5 class="card-title">Профессионализм</h5>
-                                <p class="card-text">Наши курсы созданы опытными разработчиками и педагогами.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <i class="fas fa-laptop-code fa-3x text-primary mb-3"></i>
-                                <h5 class="card-title">Практический подход</h5>
-                                <p class="card-text">Учитесь на реальных проектах и получите бесценный опыт.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <i class="fas fa-users fa-3x text-primary mb-3"></i>
-                                <h5 class="card-title">Сообщество</h5>
-                                <p class="card-text">Станьте частью дружной команды студентов и преподавателей.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <button type="submit" class="btn btn-primary w-100">Войти</button>
+        </form>
+        <p id="error-message" class="text-danger text-center mt-3" style="display: none;">Неверный логин или пароль</p>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./js/script.js"></script>
+    
+    <script src="./js/c.js"></script>
+    <script>
+        document.getElementById("login-form").addEventListener("submit", function (event) {
+            event.preventDefault(); // Остановить отправку формы
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            // Загружаем данные из account.json
+            fetch('https://progito.github.io/resource/data/account.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Ошибка загрузки данных аккаунтов");
+                    }
+                    return response.json();
+                })
+                .then(async (accounts) => {
+                    // Используем асинхронную функцию для поиска пользователя
+                    const user = await findUser(accounts, username, password);
+
+                    if (user) {
+                        // Сохранить username в localStorage
+                        localStorage.setItem('username', user.username);
+
+                        // Если пользователь найден, переходим на dashboard.html
+                        window.location.href = "./pages/dashboard.html";
+                    } else {
+                        // Если пользователь не найден, показываем сообщение об ошибке
+                        document.getElementById("error-message").style.display = "block";
+                    }
+                })
+                .catch(error => {
+                    console.error("Ошибка:", error.message);
+                    document.getElementById("error-message").textContent = "Ошибка загрузки данных. Попробуйте позже.";
+                    document.getElementById("error-message").style.display = "block";
+                });
+        });
+
+        // Асинхронная функция для поиска пользователя
+        async function findUser(accounts, username, password) {
+            for (const acc of accounts) {
+                const decryptedPassword = await decrypt(acc.password.trim());
+                if (acc.username === username && decryptedPassword === password) {
+                    return acc; // Пользователь найден
+                }
+            }
+            return null; // Пользователь не найден
+        }
+    </script>
 </body>
 </html>

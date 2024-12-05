@@ -139,3 +139,18 @@ body {
     white-space: nowrap;
     font-size: 0.8rem;
 }
+/* Яркий зеленый цвет для прогресс-бара */
+.bg-success {
+    background-color: #28a745 !important; /* Ярко-зеленый оттенок */
+}
+
+/* Эффект увеличения при наведении на карточку */
+.course-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Плавное увеличение и тень */
+}
+
+.course-card:hover {
+    transform: scale(1.01); /* Увеличение карточки */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Тень при наведении */
+    cursor: pointer;
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrey University</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="bg-light shadow">
+            <div class="sidebar-header p-3 d-flex align-items-center justify-content-between">
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none text-dark" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x"></i>
+                        <span id="username" class="ms-2">Username</span>
+                        <i class="fas fa-chevron-down ms-1"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Настройки</a></li>
+                        <li><a class="dropdown-item" href="#" id="logout"><i class="fas fa-sign-out-alt me-2"></i>Выйти</a></li>
+                    </ul>
+                </div>
+            </div>
+            <ul class="list-unstyled components px-3">
+                <li>
+                    <a href="#learningMenu" data-bs-toggle="collapse" aria-expanded="false" class="d-flex align-items-center">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span class="ms-2">Обучение</span>
+                        <i class="fas fa-chevron-down ms-auto"></i>
+                    </a>
+                    <ul class="collapse list-unstyled ms-3" id="learningMenu">
+                        <li><a href="#/course" class="d-block">Курсы</a></li> <!-- Здесь хэш-маршрут -->
+                        <li><a href="#" class="d-block">Тестирование</a></li>
+                        <li><a href="#" class="d-block">Итоговые проекты</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" id="messagesLink" class="d-flex align-items-center">
+                        <i class="fas fa-envelope"></i>
+                        <span class="ms-2">Сообщения</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="d-flex align-items-center">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="ms-2">Покупки</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="text-center mt-auto mb-3">
+                <button id="toggleSidebar" class="btn btn-light border">
+                    <i class="fas fa-angle-double-left"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Content -->
+        <div class="content p-4 w-100 bg-white">
+            <div id="dynamic-content">
+                <!-- Контент по умолчанию -->
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/router.js"></script>
+    <script>
+        // Получаем имя пользователя из localStorage
+        const username = localStorage.getItem('username');
+
+        if (username) {
+            // Если имя пользователя найдено, отображаем его в интерфейсе
+            document.getElementById('username').textContent = username;
+        } else {
+            // Если имя пользователя не найдено (например, если он не вошел), можно перенаправить его на страницу входа
+            window.location.href = "../index.html";
+        }
+
+        // Обработчик для кнопки "Выйти"
+        document.getElementById('logout').addEventListener('click', function() {
+            // Удаляем имя пользователя из localStorage и перенаправляем на страницу входа
+            localStorage.removeItem('username');
+            window.location.href = "../index.html";
+        });
+
+    </script>
+</body>
+</html>

@@ -154,3 +154,96 @@ body {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Тень при наведении */
     cursor: pointer;
 }
+/* Карточка */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Плавное изменение масштаба и тени */
+}
+
+/* Эффект при наведении */
+.card:hover {
+    cursor: pointer; /* Курсор в виде указателя */
+    transform: scale(1.01); /* Увеличение масштаба */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень */
+}
+.video-container {
+    display: flex;
+    justify-content: center; /* Центрирует содержимое по горизонтали */
+    align-items: center; /* Центрирует содержимое по вертикали */
+    margin-bottom: 1.5rem; /* Отступ снизу */
+}
+
+.comment-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    position: relative;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.comment {
+    font-style: italic;
+    font-size: 1.2em;
+    margin: 0;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border-left: 4px solid #007bff;
+    border-radius: 8px;
+    position: relative;
+    color: #555;
+}
+
+
+
+.comment p {
+    margin: 0;
+}
+
+.comment::before {
+    content: "❝";  /* Символ для кавычки */
+    font-size: 3em;
+    color: #007bff;
+    position: absolute;
+    left: -15px;
+    top: -30px;
+    font-weight: bold;
+}
+
+.comment-container::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #f9f9f9;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+    transition: width 0.3s ease;
+}
+
+#sidebar.collapsed {
+    width: 80px;
+}
+
+.content {
+    margin-left: 270px;
+    transition: margin-left 0.3s ease;
+}
+
+#sidebar.collapsed ~ .content {
+    margin-left: 100px;
+}

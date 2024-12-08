@@ -9,8 +9,45 @@ document.getElementById('messagesLink').addEventListener('click', function(event
 });
 
 
+function generateCertificate(encodedTitle, imagePath, username) {
+    const canvas = document.getElementById(`canvas_${encodedTitle}`);
+    if (!canvas) {
+        console.error(`Canvas с ID canvas_${encodedTitle} не найден`);
+        return;
+    }
+
+    const ctx = canvas.getContext("2d");
+
+    const img = new Image();
+    img.src = imagePath;
+
+    img.onload = () => {
+        // Рисуем фон сертификата
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // Настраиваем текст
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "#000";
+        ctx.textAlign = "center";
+
+        // Рисуем имя выпускника
+        ctx.fillText(username, canvas.width / 2, canvas.height - 250);
+
+        // Скачивание сертификата
+        const link = document.createElement("a");
+        link.download = `certificate_${decodeURIComponent(encodedTitle)}_${username}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    };
+
+    img.onerror = () => {
+        console.error(`Ошибка загрузки изображения: ${imagePath}`);
+        alert("Не удалось загрузить изображение для сертификата.");
+    };
+}
+
+
 document.addEventListener("DOMContentLoaded", function () {
-    // Обработчик клика на "Покупки"
     const purchasesLink = document.querySelector('.fa-shopping-cart').parentElement;
 
     purchasesLink.addEventListener("click", function (event) {
@@ -19,26 +56,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function loadPurchases() {
-        // Очищаем контейнер
         const contentContainer = document.getElementById("dynamic-content");
         contentContainer.innerHTML = "<h2 class='mb-4'>Покупки</h2><p>Загружаем данные...</p>";
 
-        // Загружаем данные из JSON
         fetch('https://progito.github.io/resource/data/purchase.json')
             .then(response => {
-                if (!response.ok) {
-                    throw new Error("Ошибка загрузки данных");
-                }
+                if (!response.ok) throw new Error("Ошибка загрузки данных");
                 return response.json();
             })
             .then(data => {
-                // Фильтруем покупки для текущего пользователя
                 const username = localStorage.getItem('username');
-                if (username) {
-                    const filteredData = data.filter(purchase => purchase.username === username);
-                    renderPurchasesTable(filteredData);
+                if (username && data[username]) {
+                    renderPurchasesTable(data[username]);
                 } else {
-                    contentContainer.innerHTML = "<p class='text-danger'>Не удалось найти имя пользователя в localStorage.</p>";
+                    contentContainer.innerHTML = "<p class='text-danger'>У вас нет покупок или пользователь не найден.</p>";
                 }
             })
             .catch(error => {
@@ -54,37 +85,33 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Создаем таблицу
         let tableHTML = `
-            <table class="table table-bordered table-hover">
+            <table class="table table-striped table-bordered table-hover">
                 <thead class="table-light">
                     <tr>
-                        <th>ID</th>
-                        <th>Пользователь</th>
                         <th>Название курса</th>
-                        <th>Дата покупки</th>
-                        <th>Статус</th>
+                        <th>Описание курса</th>
+                        <th>Цена курса</th>
+                        <th class="text-center">Статус операции</th>
                     </tr>
                 </thead>
                 <tbody>
         `;
 
-        // Заполняем таблицу данными
-        data.forEach(purchase => {
+        data.forEach((purchase) => {
             tableHTML += `
                 <tr>
-                    <td>${purchase.id}</td>
-                    <td>${purchase.username}</td>
                     <td>${purchase.course}</td>
-                    <td>${purchase.date}</td>
-                    <td>${purchase.status}</td>
+                    <td>${purchase.description}</td>
+                    <td>${purchase.price}</td>
+                    <td class="text-center">
+                        <span class="badge bg-success" style="font-size: 1rem;">Оплачен</span>
+                    </td>
                 </tr>
             `;
         });
 
         tableHTML += `</tbody></table>`;
-
-        // Заменяем содержимое контейнера
         contentContainer.innerHTML = tableHTML;
     }
 });

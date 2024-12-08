@@ -247,3 +247,8 @@ body {
 #sidebar.collapsed ~ .content {
     margin-left: 100px;
 }
+.text-lightgray {
+    color: #c4c4c4; /* Светло-серый цвет */
+}
+
+

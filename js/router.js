@@ -69,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const routes = {
         "#/home": renderHome,
         "#/settings": renderSettings,
+        "#/certificates": renderCertificate,
         "#/courses": renderCourses,
         "#/course": renderCourseDetails,
         "#/section": renderSectionDetails,
@@ -182,8 +183,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("import-file").addEventListener("change", importLocalStorage);
     }
 
-
-    // Список курсов
+    const key = 'isdfii823r7247fy437fterftgersdf23728'; 
+    
     function renderCourses() {
         fetch('https://progito.github.io/resource/data/purchase.json')
             .then(response => response.json())
@@ -226,12 +227,22 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
-    // Детали курса
+    
+
+    async function fetchAndDecrypt(encryptedData) {
+        try {
+            const bytes = CryptoJS.AES.decrypt(encryptedData, key);
+            const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+            return JSON.parse(decryptedData);
+        } catch (err) { throw err;  }
+    }
+    
     function renderCourseDetails(queryString) {
         const courseName = new URLSearchParams(queryString).get("name");
-
-        fetch("../js/data.json")
-            .then(res => res.json())
+    
+        fetch("https://progito.github.io/resource/data/data.json")
+            .then(res => res.text())  
+            .then(text => fetchAndDecrypt(text))  
             .then(data => {
                 const courseContent = data[courseName]?.[0];
                 if (!courseContent) {
@@ -243,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const completedLessons = Object.values(courseProgress[courseName]?.[section] || {}).filter(status => status).length;
                     const totalLessons = courseContent[section]?.length || 0;
                     const progress = calculateProgress(completedLessons, totalLessons);
-
+    
                     return `
                         <div class="card mb-3" onclick="window.location.href='#/section?course=${encodeURIComponent(courseName)}&section=${encodeURIComponent(section)}'">
                             <div class="card-body">
@@ -258,7 +269,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                     `;
                 }).join("");
-
                 dynamicContent.innerHTML = `<h2>${courseName}</h2>${sectionsHTML}`;
             })
             .catch(err => {
@@ -266,6 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 dynamicContent.innerHTML = `<p>Ошибка загрузки данных курса.</p>`;
             });
     }
+    
 
     // Разделы курса
     function renderSectionDetails(queryString) {
@@ -273,8 +284,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const courseName = params.get("course");
         const sectionName = params.get("section");
 
-        fetch("../js/data.json")
-            .then(res => res.json())
+        fetch("https://progito.github.io/resource/data/data.json")
+            .then(res => res.text())  
+            .then(text => fetchAndDecrypt(text))  
             .then(data => {
                 const sectionContent = data[courseName]?.[0]?.[sectionName];
                 if (!sectionContent) {
@@ -292,8 +304,9 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <h5>${lessonName}</h5>
                                 <div class="text-end">
                                     <i class="fas fa-check-circle ${isCompleted ? 'text-success' : 'text-muted'}"></i>
-                                    <small>${isCompleted ? 'Урок пройден' : 'Не пройден'}</small>
+                                    <small class="${isCompleted ? '' : 'text-lightgray'}">${isCompleted ? 'Урок пройден' : 'Не пройден'}</small>
                                 </div>
+
                             </div>
                         </div>
                     `;
@@ -319,8 +332,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const lessonIndex = parseInt(params.get("lesson"), 10);
         const les = params.get("lsn");
 
-        fetch("../js/data.json")
-            .then(res => res.json())
+        fetch("https://progito.github.io/resource/data/data.json")
+            .then(res => res.text())  
+            .then(text => fetchAndDecrypt(text))  
             .then(data => {
                 const sectionContent = data[courseName]?.[0]?.[sectionName];
                 const lessonArray = sectionContent?.[lessonIndex];
@@ -390,6 +404,86 @@ document.addEventListener("DOMContentLoaded", () => {
                 dynamicContent.innerHTML = `<p>Ошибка загрузки данных урока.</p>`;
             });
     }
+
+    async function renderCertificate() {
+        if (!username) {
+            dynamicContent.innerHTML = `<p>Необходима авторизация. <a href="../index.html">Войти</a></p>`;
+            return;
+        }
+    
+        try {
+            const response = await fetch("https://progito.github.io/resource/data/cert.json");
+            const certificates = await response.json();
+    
+            // Проверка, что сертификаты - это массив
+            if (!Array.isArray(certificates)) {
+                console.error("Ожидался массив сертификатов, но получены другие данные.");
+                dynamicContent.innerHTML = `<p>Ошибка загрузки сертификатов.</p>`;
+                return;
+            }
+    
+            // Фильтрация сертификатов для текущего пользователя
+            const userCertificates = certificates.filter(cert => cert.username === username);
+    
+            if (userCertificates.length === 0) {
+                dynamicContent.innerHTML = `<p>Сертификаты не найдены.</p>`;
+                return;
+            }
+    
+            // Соответствие названия курса и пути к изображению
+            const courseImages = {
+                "Основы HTML": "../assets/cert/i6.jpg",
+                "Junior Python Developer": "../assets/cert/i1.jpg",
+                "Junior Frontend Developer": "../assets/cert/i3.jpg",
+                "Middle Frontend Developer": "../assets/cert/i2.jpg",
+                "Основы Git": "../assets/cert/i4.jpg",
+                "Основы работы с компьютером": "../assets/cert/i5.jpg",
+            };
+
+            // Рендер сертификатов в виде таблицы
+            dynamicContent.innerHTML = `
+                <h1>Мои сертификаты</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Название курса</th>
+                            <th>Кому выдан?</th>
+                            <th>Статус прохождения</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${userCertificates.map(cert => {
+                            // Проверка наличия всех необходимых данных
+                            
+                            if (!cert.title) {
+                                return ''; // Пропускаем сертификат, если нет обязательных данных
+                            }
+    
+                            return `
+                                <tr>
+                                    <td>${cert.title}</td>
+                                    <td>${cert.name}</td>
+                                    <td>Пройден</td>
+                                    <td>
+                                        <button onclick="generateCertificate('${encodeURIComponent(cert.title)}', '${courseImages[cert.title]}', '${cert.name}')" class="btn btn-primary">
+                                            Скачать сертификат
+                                        </button>
+                                    </td>
+                                    <canvas style="display:none" id="canvas_${encodeURIComponent(cert.title)}" width="800" height="600" style="border: 1px solid #ccc; display: block; margin: 20px 0;"></canvas>
+                                </tr>
+                            `;
+                        }).join("")}
+                    </tbody>
+                </table>
+                
+            `;
+        } catch (err) {
+            console.error("Ошибка загрузки данных сертификатов:", err);
+            dynamicContent.innerHTML = `<p>Ошибка загрузки сертификатов.</p>`;
+        }
+    }
+    
 
     // Страница 404
     function renderNotFound() {

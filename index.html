@@ -23,11 +23,67 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             background-color: #fff;
         }
+        .logo-img {
+            max-width: 320px; /* Установите подходящий размер */
+            height: auto; /* Сохраняет пропорции изображения */
+            margin: 0 auto; /* Центрирует изображение */
+        }
+        .login-card {
+            max-width: 400px; /* Ограничьте ширину карточки */
+            padding: 20px;
+            margin: 0 auto; /* Центрирует карточку на странице */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень для эстетики */
+            border-radius: 8px; /* Закругленные углы */
+            background: #fff; /* Белый фон */
+        }
+        @media (max-width: 576px) {
+            .login-card {
+                max-width: 90%; /* Уменьшаем ширину карточки на мобильных устройствах */
+                padding: 15px;
+            }
+
+            .logo-img {
+                max-width: 250px; /* Уменьшаем размер логотипа для мобильных */
+            }
+
+            .form-control {
+                padding: 10px; /* Увеличиваем размер полей ввода */
+                font-size: 16px; /* Увеличиваем шрифт для удобства */
+            }
+
+            .btn {
+                padding: 12px; /* Увеличиваем размер кнопки */
+                font-size: 18px; /* Увеличиваем шрифт на кнопке */
+            }
+        }
+
+        /* Адаптация для экранов планшетов */
+        @media (max-width: 768px) {
+            .login-card {
+                max-width: 80%; /* Ширина карточки для планшетов */
+            }
+
+            .logo-img {
+                max-width: 250px; /* Размер логотипа на планшетах */
+            }
+
+            .form-control {
+                padding: 12px; /* Подгонка поля ввода */
+                font-size: 17px;
+            }
+
+            .btn {
+                padding: 12px; /* Кнопка на планшетах */
+                font-size: 18px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="login-card">
-        <h2 class="text-center mb-4">Andrey University</h2>
+        <div class="text-center mb-4">
+            <img src="./assets/logo.jpg" alt="logo" class="logo-img"/>
+        </div>
         <p class="text-muted text-center mb-4">Введите свои данные для входа</p>
         <form id="login-form">
             <div class="mb-3">

@@ -2,13 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const dynamicContent = document.getElementById("dynamic-content");
     const username = localStorage.getItem("username");
     const elemUsername = document.getElementById("username");
+
     elemUsername.textContent = username;
     if (!username) {
         window.location.href = "../index.html";
         return;
     }
-
-    
 
     const courseProgress = JSON.parse(localStorage.getItem("courseProgress")) || {};
 
@@ -185,6 +184,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const key = 'isdfii823r7247fy437fterftgersdf23728'; 
     
+
+    const courseImages = {
+        "Основы Git": {
+            image: "https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png",
+            bg: "#F5F5F5" // Светлый фон
+        },
+        "Основы HTML": {
+            image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/800px-HTML5_logo_and_wordmark.svg.png",
+            bg: "#FFEBCC" // Нежный оранжевый фон
+        },
+        "Junior Python Developer": {
+            image: "https://img.icons8.com/color/512/python.png",
+            bg: "#E0F7FA" // Светлый голубой фон
+        },
+        "Junior Frontend Developer": {
+            image: "https://cdni.iconscout.com/illustration/premium/thumb/frontend-developer-illustration-download-in-svg-png-gif-file-formats--website-development-web-programming-backend-programmer-pack-design-illustrations-6109659.png?f=webp",
+            bg: "#E8F5E9" // Светлый зелёный фон
+        },
+        "Основы программирования": {
+            image: "https://ouch-cdn2.icons8.com/8Ch0S_gf7Z61bPTRyrjRiKSWp_Fbnv1i6VnNcX8UIRM/rs:fit:456:456/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9zdmcvNjg0/LzI0YWNlM2U2LTll/N2MtNDMyZC05NjJj/LTY0YjQ4MjYyYWEy/Zi5zdmc.png",
+            bg: "#FFF9C4" // Светлый жёлтый фон
+        },
+        "Основы работы с компьютером": {
+            image: "https://pngimg.com/d/computer_pc_PNG7720.png",
+            bg: "#FCE4EC" // Светлый розовый фон
+        },
+        "Middle Frontend Developer": {
+            image: "https://png.pngtree.com/png-vector/20240805/ourmid/pngtree-freelancer-software-developer-programmer-coder-illustrator-png-image_13076689.png",
+            bg: "#FF8F8F" 
+        }
+    };
+    
+
     function renderCourses() {
         fetch('https://progito.github.io/resource/data/purchase.json')
             .then(response => response.json())
@@ -197,37 +229,54 @@ document.addEventListener("DOMContentLoaded", () => {
                     `;
                     return;
                 }
-
+    
                 const coursesHTML = userCourses.map((course, index) => {
-                    const completedLessons = Object.values(courseProgress[course.course] || {}).flatMap(module => Object.values(module)).filter(status => status).length;
-                    const totalLessons = 10; // Примерное количество уроков (замените реальными данными).
+                    const completedLessons = Object.values(courseProgress[course.course] || {})
+                        .flatMap(module => Object.values(module))
+                        .filter(status => status).length;
+                    const totalLessons = 10; // Примерное количество уроков
                     const progress = calculateProgress(completedLessons, totalLessons);
-
+                    const courseInfo = courseImages[course.course] || {};
+                    const imageUrl = courseInfo.image || "https://example.com/default-course-image.jpg";
+                    const bgColor = courseInfo.bg || "#FFFFFF";
+    
                     return `
-                        <div id="key${index}" class="card mb-3" onclick="window.location.href='#/course?name=${encodeURIComponent(course.course)}'">
-                            <div class="card-body">
-                                <h5>${course.course}</h5>
-                                <p>${course.description || "Описание отсутствует"}</p>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: ${progress}%;" 
-                                         aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100">
-                                         ${progress}%
+                        <div class="col-md-6 mb-4">
+                            <div id="key${index}" class="card h-100" 
+                                onclick="window.location.href='#/course?name=${encodeURIComponent(course.course)}'"
+                                style="background-color: ${bgColor}; border-radius: 8px; overflow: hidden;">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <h5>${course.course}</h5>
+                                        <p>${course.description || "Описание отсутствует"}</p>
+                                        <div class="progress">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: ${progress}%;" 
+                                                 aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100">
+                                                 ${progress}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ms-3">
+                                        <img src="${imageUrl}" alt="${course.course}" class="img-fluid" style="max-width: 100px; border-radius: 8px;">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     `;
                 }).join("");
-
-                dynamicContent.innerHTML = `<h2>Ваши курсы</h2>${coursesHTML}`;
+    
+                dynamicContent.innerHTML = `
+                    <h2>Ваши курсы</h2>
+                    <div class="row">${coursesHTML}</div>
+                `;
             })
             .catch(err => {
                 console.error("Ошибка загрузки курсов:", err);
                 dynamicContent.innerHTML = `<p>Ошибка загрузки данных. Проверьте подключение к интернету.</p>`;
             });
     }
-
     
+   
 
     async function fetchAndDecrypt(encryptedData) {
         try {
@@ -256,7 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const progress = calculateProgress(completedLessons, totalLessons);
     
                     return `
-                        <div class="card mb-3" onclick="window.location.href='#/section?course=${encodeURIComponent(courseName)}&section=${encodeURIComponent(section)}'">
+                        <div class="card mb-3" onclick="window.location.href='#/section?course=${encodeURIComponent(courseName)}&section=${encodeURIComponent(section)}'" style="${courseName.includes('Middle') ? 'border: 2px solid red;' : ''}">
                             <div class="card-body">
                                 <h5>${section}</h5>
                                 <div class="progress">
